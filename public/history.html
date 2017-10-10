@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <title>润扬大桥索力/索长监测系统</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/history.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+    <!-- 引入 echarts.js -->
+    <script src="js/echarts.js"></script>
+    <script src="js/theme/macarons.js"></script>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<header>
+    <span class="cloud-title">润扬大桥索力/索长监测系统</span>
+    <span>
+        <p class="date">
+            <strong id="Y"></strong>
+            <strong id="MH"></strong>
+            <strong id="TD"></strong>
+            <strong id="D"></strong>
+            <strong id="H"></strong>
+            <strong id="M"></strong>
+            <strong id="S"></strong>
+        </p>
+    </span>
+</header>
+<div class="head2">
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="realtime.html">实时数据</a></li>
+        <li role="presentation" class="active"><a href="#">历史数据</a></li>
+    </ul>
+</div>
+<div class="container">
+    <div class="history">
+        <div class="row">
+            <span class="picktime">时间选择：</span>
+            <input type="text" class="beginTime" value="" id="beginTime" />
+            <span class="picktime-p">至</span>
+            <input type="text" class="endTime" value="" id="endTime"/>
+            <!--<input id="history-submit"  type="submit" name="submited" value="确定">-->
+            <button id="history-submit" class="btn" type="submit" name="submited">确定</button>
+        </div>
+        <div class="down">
+            <div class="history-chart col-xs-12 col-lg-6" id="HistoryChart">
+            </div>
+            <div class="history-chart col-xs-12 col-lg-6" id="CableLengthHistoryChart">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/history.js"></script>
+<script src="js/date/jquery.datetimepicker.full.js"></script>
+<script type="text/javascript" src="./js/remote/remote.js"></script>
+<script type="text/javascript">
+
+    jQuery.datetimepicker.setLocale('zh');
+    $('.beginTime').datetimepicker({
+        format: 'Y-m-d H:i',
+        onShow: function (ct) {
+            this.setOptions({
+                maxDate:jQuery('#endTime').val() ? jQuery('#endTime').val() : false
+            });
+        },
+        timepicker: true,
+        theme: 'dark',
+    });
+    $('.endTime').datetimepicker({
+        format: 'Y-m-d H:i',
+        onShow: function (ct) {
+            this.setOptions({
+                minDate:jQuery('#beginTime').val() ? jQuery('#beginTime').val() : false
+            });
+        },
+        timepicker: true,
+        theme: 'dark',
+    });
+
+    /**
+     * 格式化时间
+     */
+    Date.prototype.pattern = function (fmt) {
+        let o = {
+            "M+": this.getMonth() + 1, // 月份
+            "d+": this.getDate(), // 日
+            "h+": this.getHours() % 24 === 1 ? 0 : this.getHours() % 24, // 小时
+            "H+": this.getHours(), // 小时
+            "m+": this.getMinutes(), // 分
+            "s+": this.getSeconds(), // 秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+            "S": this.getMilliseconds(), // 毫秒
+        };
+        let week = {
+            "0": "/u65e5",
+            "1": "/u4e00",
+            "2": "/u4e8c",
+            "3": "/u4e09",
+            "4": "/u56db",
+            "5": "/u4e94",
+            "6": "/u516d",
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+        }
+        for (let k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+    /**
+     * 设置默认时间，从当前时间往前取一个月的时间
+     */
+    let from = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).pattern("yyyy-MM-dd hh:mm");
+    let to = new Date().pattern("yyyy-MM-dd hh:mm");
+    $("input#beginTime").val(from);
+    $("input#endTime").val(to);
+        function fetchSensorData()
+    {
+        let temp1 = $("input#beginTime").val() + ":00";
+        let temp2 = $("input#endTime").val() + ":00";
+        let begintime = new Date(Date.parse(temp1.replace(/-/g,"/")));
+        let endtime = new Date(Date.parse(temp2.replace(/-/g,"/")));
+        let id = '05'; //$("ul#chuhue-sensors-dropdown li.sensorSelected").attr("id")
+//        let sensorIds = [id];
+        // 获取历史时间数据
+        getHistoryDateAll(begintime.toJSON(), endtime.toJSON(), id)
+        /*getHistoryDateAll(begintime.toJSON(), endtime.toJSON(), id).then((data) => {
+            //refreshLineChart(data);
+            refreshData(data);
+        });*/
+        let id2 = '0601';
+		getHistoryDate(begintime.toJSON(), endtime.toJSON(), id2)
+//        getHistoryDate(begintime.toJSON(), endtime.toJSON(), id2).then((data) => {
+ //           refreshCableLengthData(data);
+  //          console.log(data);
+  //      });
+    }
+    fetchSensorData();
+    $('div.row').on('click', 'button#history-submit', function(e){
+        fetchSensorData();
+    });
+</script>
+</html>

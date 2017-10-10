@@ -1,0 +1,82 @@
+body{
+    height: 100%;
+    width: 100%;
+    background: #131823;
+    position: relative;
+    font-family: "Microsoft YaHei", "Arial";
+}
+
+header{
+    line-height: 50px;
+    width: 100%;
+    background: #26263d;
+    box-shadow: 3px 3px 6px #000;
+}
+.head2{
+    background: #191a2c;
+    line-height: 70px;
+    padding-top: 10px;
+    width: 100%;
+    color:white;
+    font-size:18px;
+}
+.nav-tabs {
+    border-bottom: 1px solid #5583e3;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #191a2c;
+    border: 1px solid #5583e3;
+    border-bottom-color: transparent;
+}
+
+.nav-tabs > li > a {
+    color: #707070;
+}
+
+.nav-tabs > li> a:hover,
+.nav-tabs > li> a:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #5583e3;
+    border: 1px solid #26263d;
+    border-bottom-color: transparent;
+}
+
+.head2 > .country{
+    margin-left: 20px;
+}
+
+.head2 > a{
+    color:white;
+    font-size:20px;
+    font-family: "Microsoft YaHei", "Arial";
+}
+
+.cloud-title{
+    line-height: 50px;
+    font-size: 24px;
+    margin-left: 40%;
+    color: white;
+}
+
+.date{
+    font-family: Microsoft YaHei;
+    color: white;
+    float:right;
+    margin:5px 10px;
+    text-align:center;
+}
+
+body > .container{
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    top: 130px;
+    padding: 0;
+    color: white;
+}

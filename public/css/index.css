@@ -1,0 +1,75 @@
+.up{
+    height: 49%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.up > .col-lg-6{
+    height: 100%;
+    padding: 0;
+}
+
+.col-lg-6 > .chart1{
+    background-color: #26263d !important;
+    height: 100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 6px;
+}
+
+.col-lg-6 > .chart2{
+    background-color: #26263d !important;
+    height: 100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 6px;
+}
+
+.down{
+    height: 49%;
+    margin-top:10px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.down>.col-lg-6{
+    height:100%;
+    padding: 0;
+}
+
+.col-lg-6 > .chart3{
+    background-color: #26263d !important;
+    height:100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 6px;
+}
+
+.col-lg-6 > .chart4{
+    background-color: #26263d !important;
+    height:100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 6px;
+}
+
+.down2{
+    height: 49%;
+    margin-top:10px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.down2>.col-lg-6{
+    height:100%;
+    padding: 0;
+}
+
+.col-lg-6 > .chart5{
+    background-color: #26263d !important;
+    height:100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}

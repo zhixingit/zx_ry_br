@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <title>润扬大桥索力/索长监测系统</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- 引入 echarts.js -->
+    <script src="js/echarts.js"></script>
+    <script src="js/theme/macarons.js"></script>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<header>
+    <span class="cloud-title">润扬大桥索力/索长监测系统</span>
+    <span>
+        <p class="date">
+            <strong id="Y"></strong>
+            <strong id="MH"></strong>
+            <strong id="TD"></strong>
+            <strong id="D"></strong>
+            <strong id="H"></strong>
+            <strong id="M"></strong>
+            <strong id="S"></strong>
+        </p>
+    </span>
+</header>
+<div class="head2">
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">实时数据</a></li>
+        <li role="presentation"><a href="history.html">历史数据</a></li>
+    </ul>
+</div>
+<div class="container">
+    <div class="up">
+        <div class="col-xs-12 col-lg-6">
+            <div class="chart1" id="RealTime_01"></div>
+        </div>
+        <div class="col-xs-12 col-lg-6">
+            <div class="chart2" id="RealTime_02"></div>
+        </div>
+    </div>
+    <div class="down">
+        <div class="col-xs-12 col-lg-6">
+            <div class="chart3" id="RealTime_03"></div>
+        </div>
+        <div class="col-xs-12 col-lg-6">
+            <div class="chart4" id="RealTime_04"></div>
+        </div>
+    </div>
+    <div class="down2">
+        <div class="col-xs-12 col-lg-6">
+            <div class="chart5" id="RealTime_05"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/index.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"></script>
+<script type="text/javascript" src="./js/remote/remote.js"></script>
+<script type="text/javascript">
+    let client = {};
+    function startMonitor(id, value)
+    {
+        if (!client[id])
+        {
+            client[id] = io("http://106.14.190.36:3000" + "/api/sensor/" + id);
+            if ($.isFunction(value))
+            {
+                client[id].on("value", value);
+            }
+        }
+        client[id].connect('http://106.14.190.36:3000');
+    }
+
+    function fetchSensorData()
+    {
+        let begintime = new Date(new Date().getTime()-60*1000*60);
+        let endtime = new Date();
+        let id1 = '0501';
+        let id2 = '0502';
+        let id3 = '0503';
+        let id4 = '0504';
+        let id5 = '0601';
+        // 获取历史时间数据
+
+        getHistoryDate(begintime.toJSON(), endtime.toJSON(), id1);
+        /*getHistoryDate(begintime.toJSON(), endtime.toJSON(), id1).then((data) => {
+            initialData1(data);
+        });*/
+        getHistoryDate(begintime.toJSON(), endtime.toJSON(), id2);
+        /*getHistoryDate(begintime.toJSON(), endtime.toJSON(), id2).then((data) => {
+            initialData2(data);
+        });*/
+        getHistoryDate(begintime.toJSON(), endtime.toJSON(), id3);
+        /*getHistoryDate(begintime.toJSON(), endtime.toJSON(), id3).then((data) => {
+            initialData3(data);
+        });*/
+        getHistoryDate(begintime.toJSON(), endtime.toJSON(), id4);
+        /*getHistoryDate(begintime.toJSON(), endtime.toJSON(), id4).then((data) => {
+            initialData4(data);
+        });*/
+		getHistoryDate(begintime.toJSON(), endtime.toJSON(), id5);
+
+        //    updateRealTimeData1(data);
+
+        startMonitor(id1,function (data) {
+            updateRealTimeData1(data)
+        })
+
+        startMonitor(id2, function (data) {
+            updateRealTimeData2(data);
+        })
+        startMonitor(id3, function (data) {
+            updateRealTimeData3(data);
+        })
+        startMonitor(id4, function (data) {
+            updateRealTimeData4(data);
+        })
+        startMonitor(id5, function (data) {
+			updateRealTimeData5(data);
+        })
+
+    }
+    fetchSensorData();
+</script>
+</html>
